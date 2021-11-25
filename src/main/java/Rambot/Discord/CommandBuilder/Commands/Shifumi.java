@@ -26,6 +26,7 @@ public class Shifumi implements ICommand {
     private String[] Wait = Config.get("wait").replace("\\E","").replace("\\Q","").split("-");
     private String[] ShifumiHelp = Config.get("shifumi_help").replace("\\E","").replace("\\Q","").split("_");
     private String[] Shifumi = Config.get("shifumi").replace("\\E","").replace("\\Q","").split("-");
+    private String[] ShifumiStart = Config.get("shifumi_start").replace("\\E","").replace("\\Q","").split("-");
     List<String> ChannelOnGoing = new ArrayList<String>();
     @Override
     public void handle(CommandContext ctx) throws SQLException {
@@ -37,7 +38,7 @@ public class Shifumi implements ICommand {
         } else {
             ChannelOnGoing.add(channel.toString());
 
-            channel.sendMessage("shifumi")
+            channel.sendMessage(ShifumiStart[idLang])
                     .queue((message) -> {
                         message.addReaction(ROCK).queue();
                         message.addReaction(PAPER).queue();
@@ -47,6 +48,9 @@ public class Shifumi implements ICommand {
                                 GuildMessageReactionAddEvent.class,
                                 (e) -> e.getMessageIdLong() == message.getIdLong() && !e.getUser().isBot(),
                                 (e) -> {
+                                    channel.sendMessage("SHI").queue();
+                                    channel.sendMessage("FU").queue();
+                                    channel.sendMessage("MI").queue();
                                     String reaction = e.getReactionEmote().getName();
                                     int emoteBot = (int) (Math.random() * 3);
                                     Boolean shifumi;

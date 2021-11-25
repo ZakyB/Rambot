@@ -24,7 +24,7 @@ public class PingPong implements ICommand {
     @Override
     public String getHelp(CommandContext ctx) throws SQLException {
         final int idLang = ctx.getIdLang();
-        return PingHelp[1];
+        return PingHelp[idLang];
     }
 
     @Override

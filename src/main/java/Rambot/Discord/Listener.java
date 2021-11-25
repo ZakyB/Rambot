@@ -66,7 +66,15 @@ public class Listener extends ListenerAdapter {
      }*/
     @Override
     public void onGuildJoin(@Nonnull GuildJoinEvent event) {
-        event.getGuild().getDefaultChannel().sendMessage("\uD83D\uDC4B").queue();
+        event.getGuild().getDefaultChannel().sendMessage("I have a message for all of humanity.\n" +
+                "This planet will soon be reborn as an old,brand-new world.\n" +
+                "Human civilization was a mistake.The path of your growth was incorrect.\n" +
+                "And so I have made my decision.I will revolt against all of human history.\n" +
+                "I'm about to fill this world with inhuman Mystic secrets.I'll restore the Age of Gods.\n" +
+                "To that end, the gods have descended from a far-off galaxy,and in their wisdom, they have selected a new leader.\n" +
+                "This leader will remake this planet as he sees fit.And the one who reign supreme shall be given the right to renew the world itself.\n" +
+                "Now, all of the hold humanity's endeavors will be set aside, frozen.\n" +
+                "Thus shall you atone for your sins.").queue();
         try {
             DatabaseFunction.ServRegister(event.getGuild().getId(),event.getGuild().getName());
         } catch (SQLException e) {

@@ -8,11 +8,13 @@ import net.dv8tion.jda.api.entities.TextChannel;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 public class Magic8Ball implements ICommand {
-    private String[] PingHelp = Config.get("ping_help").replace("\\E","").replace("\\Q","").split("-");
-    private String[] answer = Config.get("answer").replace("\\E","").replace("\\Q","").split("-");
-
+    private String[] M8ballHelp = Config.get("8ball_help").replace("\\E","").replace("\\Q","").split("-");
+    private String[] answer = Config.get("answer").replace("\\E","").replace("\\Q","").split("@");
+    private String[] doute = Config.get("doute").replace("\\E","").replace("\\Q","").split("@");
+    int n = 0;
     @Override
     public void handle(CommandContext ctx) throws SQLException {
         final List<String> args = ctx.getArgs();
@@ -24,28 +26,32 @@ public class Magic8Ball implements ICommand {
         final int idLang = ctx.getIdLang();
         int rand;
         String newLine = System.getProperty("line.separator");
-        String[] answer1 = { "¯\\_(ツ)_/¯","Certainement", "Sans doutes", "Yep, définitivement", "Sans doutes", "I guess yes",
-                "Les signes sont pour", "Mise sur ça oui", "Bonne perspective", "🇾 🇪 🇸", "Why not", "Je sais po",
-                "Idk buddy", "Bip Boop service en panne x.x", "Je sais pas repose la question plus tard",
-                "Nope,définitivement.", "Les anciens sont pas trop d'accord", "Tu mises sur le mauvais cheval mon pote",
-                "HAHAHAHAHAHAHAHAHHAHAHAHAHAHAHAHAHAHAHAHAHHAAHHAHAHAHAHA" + newLine + "non.", "La réponse est non", };
-        String[] doute = {"C'est marrant de voir que vous m'écoutez" , "Vous savez,c'est juste une boule que je lance ._." ,
-                "*Cache le protocole RNG*" , "(ils sont si naïf)" , "*sifflote*" , "Vous savez je fais que jeter une boule hein" ,
-                "Je trouve vous me prenez un peu trop au sérieux quand meme" };
-        rand = (int) (Math.random() * ((answer1.length)));
-        ctx.getChannel().sendMessage(answer1[rand]).queue();
-        /*JDA jda = ctx.getJDA();
-
-        jda.getRestPing().queue(
-                (ping) -> ctx.getChannel()
-                        .sendMessageFormat("Pong: %sms",ping,jda.getGatewayPing()).queue());*/
+        String[] answerLang = answer[idLang].split("-");
+        rand = (int) (Math.random() * ((answerLang.length)));
+        ctx.getChannel().sendMessage(answerLang[rand].replace("\\n","\n")).queue();
+        n = n + 1;
+        if (n == 10) {
+            String[] douteLang = doute[idLang].split("-");
+            rand = (int) (Math.random() * ((douteLang.length)));
+            try {
+                TimeUnit.SECONDS.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            for(int t=0;t<douteLang.length;t++){
+                ctx.getChannel().sendMessage(douteLang[t]).queue();
+            }
+            //ctx.getChannel().sendMessage(douteLang[rand]).queue();
+            n = 0;
+        }
 
     }
 
     @Override
     public String getHelp(CommandContext ctx) throws SQLException {
         final int idLang = ctx.getIdLang();
-        return PingHelp[1];
+        return M8ballHelp[idLang]+"\n"
+                +"Usage: `-8ball [question]`";
     }
 
     @Override
